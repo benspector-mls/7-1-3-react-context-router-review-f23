@@ -1,11 +1,23 @@
 # React Router + Context
 
 **Table of Contents**:
+- [Overall Flow](#overall-flow)
 - [Context:](#context)
   - [Examples](#examples)
 - [React Router:](#react-router)
   - [Examples](#examples-1)
 
+## Overall Flow
+
+Context:
+* The ContextProvider manages state and provides it to the App
+* The App renders the current state.
+* When the ContextProvider fetches new data, the App is re-rendered.
+
+Routing + Products:
+* The App renders the Products or Product pages depending on the current URL
+* The Products page pulls the products from Context and renders a list of Links for each product
+* The Product page pulls the products from Context, finds the product whose ID matches the path parameter `id`, and renders the found product (or a fallback).
 
 ## Context:
 
