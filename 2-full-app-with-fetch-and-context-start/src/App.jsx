@@ -6,6 +6,7 @@ import Products from './pages/Products';
 import NavBar from './components/NavBar';
 import NotFound from './pages/NotFound';
 import Product from './pages/Product';
+import Contacts from './pages/Contacts';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Dashboard />} />
           <Route path='/about' element={<About />} />
+          <Route path='/contacts' element={<Contacts />} />
           <Route path='/products' element={<Products />} />
           <Route path='/products/:id' element={<Product />} />
           <Route path='*' element={<NotFound />} />

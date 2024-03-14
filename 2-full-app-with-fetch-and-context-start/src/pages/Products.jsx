@@ -1,22 +1,34 @@
-import { Link } from "react-router-dom";
 
 /* 
 1. fetch all of the pokemon
 2. iterate through the pokemon list
 3. for each pokemon object: { id: 1, name: 'pikachu', ... }
 4. render <Link to=`/pokemons/${pokemon.id}`>{pokemon.name}</Link>
-
 */
+import { Link } from "react-router-dom";
+import ProductsContext from "../context/ProductsContext";
+import { useContext } from "react";
 
 const Products = () => {
+
+  const contextValues = useContext(ProductsContext);
+
   return (
     <>
       <h1>Products</h1>
       <ul>
-        <li><Link to='/products/1'>Product 1</Link></li>
-        <li><Link to='/products/2'>Product 2</Link></li>
-        <li><Link to='/products/3'>Product 3</Link></li>
-      </ul>
+        {
+          contextValues.products.map((product) => {
+            return (
+              <li>
+                <Link to={`/products/${product.id}`}>
+                  {product.title}
+                </Link>
+              </li>
+            )
+          })
+        }
+      </ul >
     </>
   )
 }
