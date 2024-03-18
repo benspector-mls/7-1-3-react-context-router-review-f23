@@ -11,13 +11,19 @@
 
 Context:
 * The ContextProvider manages state and provides it to the App
-* The App renders the current state.
-* When the ContextProvider fetches new data, the App is re-rendered.
+* The App and its child components use that the context to render the current state.
+* When the ContextProvider fetches new data, the App is re-rendered
+* The App components (a form, for example) can get the state-setter from context and update the state
+
+![alt text](./notes-img/context.png)
 
 Routing + Products:
-* The App renders the Products or Product pages depending on the current URL
-* The Products page pulls the products from Context and renders a list of Links for each product
-* The Product page pulls the products from Context, finds the product whose ID matches the path parameter `id`, and renders the found product (or a fallback).
+* The user visits `/products`
+* The `Routes` component reacts, rendering the `Products` component
+* The `Products` page pulls the products from context and renders a list of `Link` components for each product
+* The user clicks on the fifth product link, taking them to `/products/5`
+* The `Routes` component reacts, rendering the `Product` component
+* The `Product` page pulls the products from Context, finds the product whose ID matches the path parameter `id`, and renders the found product (or a fallback).
 
 ## Context:
 
@@ -70,14 +76,16 @@ import { useContext } from "react";
 
 const Products = () => {
 
-  const contextValues = useContext(ProductsContext);
+  // use destructuring to get the products
+  const { products } = useContext(ProductsContext);
 
+  // Use the products to render a list of links 
   return (
     <>
       <h1>Products</h1>
       <ul>
         {
-          contextValues.products.map((product) => {
+          products.map((product) => {
             return (
               <li>
                 <Link to={`/products/${product.id}`}>
@@ -97,11 +105,11 @@ export default Products;
 
 ## React Router:
 
-* Links provide navigation ("take me to `/about`") 
-* Routes/Route respond to changes in navigation ("I'm at `/about`, show me the `<About />` component")
-* Path parameters allow URLs to communicate a specific resource being displayed:
+* `Link`s provide navigation ("take me to `/about`") 
+* `Routes`/`Route` respond to changes in navigation ("I'm at `/about`, show me the `<About />` component")
+* Path parameters allows the URL to communicate which resource is being displayed:
   * `/products/:id` lets the user navigate to a URL like `/products/4` to communicate that they want the product with the `id` of 4
-* `useParams()` returns an object with the path parameters present in the current URL
+* `useParams()` returns an object with key:value pairs for the path parameters present in the current URL
 
 ### Examples
 
@@ -119,7 +127,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 )
 ```
 
-An `App.jsx` file that defines routes. The `NavBar` component is rendered regardless of the current browser location (the current URL).
+The `App` component defines the routes. The `NavBar` component is rendered regardless of the current browser location (the current URL).
 
 ```jsx
 function App() {
@@ -142,7 +150,26 @@ function App() {
 }
 ```
 
-This component is rendered for the path `'/products/:id'` where `id` is the path parameter. The component uses `useParams` to get the `params.id` value. It also pulls `products` data from the context and uses the `params.id` value to find the matching product and render its data (or a fallback message).
+The `NavBar` component has `Link` components that can take the user to another page without causing the page to reload or fetch a new resource:
+
+```jsx
+import { Link } from "react-router-dom";
+
+const NavBar = () => {
+  return (<nav>
+    <ul>
+      <li><Link to='/'>Dashboard</Link></li>
+      <li><Link to='/about'>About</Link></li>
+      <li><Link to='/contacts'>Contacts</Link></li>
+      <li><Link to='/products'>Products</Link></li>
+      <li><Link to='https://www.reddit.com/'>Reddit</Link></li>
+    </ul>
+  </nav>
+  )
+}
+```
+
+The `Product` component is rendered for the path `'/products/:id'` where `id` is the path parameter. The component uses `useParams` to get the `params.id` value. It also pulls `products` data from the context and uses the `params.id` value to find the matching product and render its data (or a fallback message).
 
 ```jsx
 import { useParams, Navigate, Link } from "react-router-dom";
